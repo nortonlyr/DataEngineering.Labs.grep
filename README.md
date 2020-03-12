@@ -12,36 +12,69 @@ Inside of the data directory there is a file called "transaction_data_daily_even
 
 Use grep to find all instances where the upload was initiated. 
 ```
-PROVIDE A SOLUTION HERE
+ggrep -r -P "started" transaction_data_daily_event_log_20190129.dat
+DIDLM230::transaction_data_upload_started_00_20190129_000000
+DIDLM230::transaction_data_upload_started_01_20190129_020000
+DIDLM230::transaction_data_upload_started_02_20190129_040000
+DIDLM230::transaction_data_upload_started_03_20190129_060000
+DIDLM230::transaction_data_upload_started_04_20190129_080000
+DIDLM230::transaction_data_upload_started_05_20190129_100000
+DIDLM230::transaction_data_upload_started_06_20190129_120000
+DIDLM230::transaction_data_upload_started_07_20190129_140000
+DIDLM230::transaction_data_upload_started_08_20190129_160000
+DIDLM230::transaction_data_upload_started_09_20190129_180000
+DIDLM230::transaction_data_upload_started_10_20190129_200000
+DIDLM230::transaction_data_upload_started_11_20190129_220000
 ```
 
 Once you've reviewed these results, repeat the process but this time using the -c flag to determine how many matching occurences were found.
 ```
-PROVIDE A SOLUTION HERE
+ggrep -c -P "started" transaction_data_daily_event_log_20190129.dat
+12
 ```
 
 
 Use grep to find all instances where the upload was successful. 
 ```
-PROVIDE A SOLUTION HERE
+ggrep -r -P "complete" transaction_data_daily_event_log_20190129.dat
+DIDLM230::transaction_data_upload_complete_00_20190129_000053
+DIDLM230::transaction_data_upload_complete_01_20190129_020035
+DIDLM230::transaction_data_upload_complete_02_20190129_040015
+DIDLM230::transaction_data_upload_complete_03_20190129_060124
+DIDLM230::transaction_data_upload_complete_04_20190129_083522
+DIDLM230::transaction_data_upload_complete_05_20190129_102311
+DIDLM230::transaction_data_upload_complete_06_20190129_121750
+DIDLM230::transaction_data_upload_complete_07_20190129_141306
+DIDLM230::transaction_data_upload_complete_08_20190129_161148
+DIDLM230::transaction_data_upload_complete_09_20190129_180912
+DIDLM230::transaction_data_upload_complete_10_20190129_200405
+DIDLM230::transaction_data_upload_complete_11_20190129_220110
 ```
 
 Once you've reviewed these results, determine how many matching occurrences were found. This time instead of using the -c flag, pipe the result to the wc program.
 ```
-PROVIDE A SOLUTION HERE
+wc -l transaction_data_daily_event_log_20190129.dat
+28 transaction_data_daily_event_log_20190129.dat
 ```
 
 
 Use grep to find all instances where the upload failed. Ensure your output displays the line numbers for each match.
 
 ```
-PROVIDE A SOLUTION HERE
+ggrep -nP "failure" transaction_data_daily_event_log_20190129.dat
+10:DIDLM230::transaction_data_upload_failure_04_20190129_080133::WEAKSIGNAL
+15:DIDLM230::transaction_data_upload_failure_06_20190129_120000::SYSTMAINTE
+18:DIDLM230::transaction_data_upload_failure_07_20190129_140754::WEAKSIGNAL
+23:DIDLM230::transaction_data_upload_failure_09_20190129_180000::SYSOFFLINE
 ```
 
 Upon review, we would like to only view failures with error code SYSOFFLINE or WEAKSIGNAL.
 
 ```
-PROVIDE A SOLUTION HERE
+ggrep -nP -o "SYSOFFLINE|WEAKSIGNAL" transaction_data_daily_event_log_20190129.dat
+10:WEAKSIGNAL
+18:WEAKSIGNAL
+23:SYSOFFLINE
 ```
 
 
@@ -51,13 +84,15 @@ Inside the data directory, there is a file called "users.csv". This file contain
 
 Identify users that have email addresses with six or less characters before the @ symbol where none of these characters are numbers.
 ```
-PROVIDE A SOLUTION HERE
+ggrep ",[a-zA-Z]\{6\}@" users.csv
+480,Beryle,Eve,bevedb@techcrunch.com,59.79.251.180,945-385-2799
+755,Conrade,Pre,cpreky@flickr.com,163.89.236.104,426-490-2406
 ```
 
 
 Marketing research has shown that the paper business is picking up in the academia space. Corporate has requested a list of all registered users that have an edu emaill address. Use grep to find the appropriate lines and output the results to a file called academia_users.txt.
 ```
-PROVIDE A SOLUTION HERE
+ggrep -r "\.edu" users.csv > academia_users.txt 
 ```
 
 
@@ -67,7 +102,7 @@ Ryan Howard did a poor job and used the CC field rather than the BCC field for t
 
 Use grep to identify the user with a single regex pattern.
 ```
-PROVIDE A SOLUTION HERE
+ggrep -r ',38.-' users.csv | grep -r ',184' 
 ```
 
 
@@ -98,5 +133,5 @@ This regex expression will ultimately be part of an automated data pipeline so w
 * Each field must be separated by a tab character.
 
 ```
-PROVIDE A SOLUTION HERE
+grep - r ^[0-9]+ [A-Z][a-z]\s\W+ "Software|Developer"+ [A-Z][a-z\s\W]+ [A-Z][a-z\s\W]+$ candidates_1.txt
 ```
